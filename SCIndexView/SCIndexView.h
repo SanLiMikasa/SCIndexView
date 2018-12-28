@@ -17,6 +17,16 @@
 - (void)indexView:(SCIndexView *)indexView didSelectAtSection:(NSUInteger)section;
 
 /**
+ 点击或者滑动索引视图时 自定义滚动到某个区 如果不实现这个方法、会默认滚动到跟index相对应的位置
+
+ @param indexView 索引视图
+ @param tableView 列表视图
+ @param curIndex 当前索引位置
+ @return section 区位置
+ */
+- (NSInteger)indexView:(SCIndexView *)indexView sectionForTableViewToScroll:(NSInteger)curIndex;
+
+/**
  当滑动tableView时，索引位置改变，你需要自己返回索引位置时，实现此方法。
  不实现此方法，或者方法的返回值为 SCIndexViewInvalidSection 时，索引位置将由控件内部自己计算。
 

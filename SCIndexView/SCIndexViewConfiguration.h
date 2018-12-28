@@ -22,6 +22,8 @@ typedef NS_ENUM(NSUInteger, SCIndexViewStyle) {
 
 @property (nonatomic, strong) UIColor *indexItemBackgroundColor;            // 索引元素背景颜色
 @property (nonatomic, strong) UIColor *indexItemTextColor;                  // 索引元素文字颜色
+@property (nonatomic, strong) UIColor *indexItemsBackGroundColorWhenDrag;   // 索引元素拖动时的背景颜色
+@property (nonatomic, strong) UIColor *indexItemsColorWhenDrag;             // 索引元素拖动时的文字颜色
 @property (nonatomic, strong) UIColor *indexItemSelectedBackgroundColor;    // 索引元素选中时背景颜色
 @property (nonatomic, strong) UIColor *indexItemSelectedTextColor;          // 索引元素选中时文字颜色
 @property (nonatomic, assign) CGFloat indexItemHeight;                      // 索引元素高度

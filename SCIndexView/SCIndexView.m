@@ -223,8 +223,13 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
         CGFloat insetHeight = self.translucentForTableViewInNavigationBar ? UIApplication.sharedApplication.statusBarFrame.size.height + 44 : 0;
         [self.tableView setContentOffset:CGPointMake(0, -insetHeight) animated:NO];
     } else {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:self.currentSection];
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(indexView:sectionForTableViewToScroll:)]) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:[self.delegate indexView:self sectionForTableViewToScroll:self.currentSection]];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        } else {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:self.currentSection];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        }
     }
     
     if (self.isTouchingIndexView) {
@@ -337,6 +342,17 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
     }
 }
 
+- (void)showOrHideDragView:(BOOL)isShow {
+    CATextLayer *textLayer = self.subTextLayers[self.currentSection];
+    if (isShow) {
+        textLayer.backgroundColor = self.configuration.indexItemsBackGroundColorWhenDrag.CGColor;
+        textLayer.foregroundColor = self.configuration.indexItemSelectedTextColor.CGColor;
+    } else {
+        textLayer.backgroundColor = self.configuration.indexItemSelectedBackgroundColor.CGColor;
+        textLayer.foregroundColor = self.configuration.indexItemSelectedTextColor.CGColor;
+    }
+}
+
 - (void)refreshTextLayer:(BOOL)selected
 {
     if (self.currentSection < 0 || self.currentSection >= (NSInteger)self.subTextLayers.count) return;
@@ -389,8 +405,10 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
     NSInteger deta = self.searchLayer ? 1 : 0;
     NSInteger currentSection = currentPosition - deta;
     [self hideIndicator:NO];
+    [self showOrHideDragView:NO];
     self.currentSection = currentSection;
-    [self showIndicator:YES];
+    [self showIndicator:NO];
+    [self showOrHideDragView:YES];
     [self onActionWithDidSelect];
     if (self.delegate && [self.delegate respondsToSelector:@selector(indexView:didSelectAtSection:)]) {
         [self.delegate indexView:self didSelectAtSection:self.currentSection];
@@ -415,8 +433,10 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
     if (currentSection == self.currentSection) return YES;
     
     [self hideIndicator:NO];
+    [self showOrHideDragView:NO];
     self.currentSection = currentSection;
     [self showIndicator:NO];
+    [self showOrHideDragView:YES];
     [self onActionWithDidSelect];
     if (self.delegate && [self.delegate respondsToSelector:@selector(indexView:didSelectAtSection:)]) {
         [self.delegate indexView:self didSelectAtSection:self.currentSection];
@@ -428,12 +448,14 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
 {
     self.touchingIndexView = NO;
     [self hideIndicator:YES];
+    [self showOrHideDragView:NO];
 }
 
 - (void)cancelTrackingWithEvent:(UIEvent *)event
 {
     self.touchingIndexView = NO;
     [self hideIndicator:YES];
+    [self showOrHideDragView:NO];
 }
 
 #pragma mark - Getters and Setters

@@ -118,6 +118,8 @@
         }
         
         SCIndexViewConfiguration *configuration = [SCIndexViewConfiguration configurationWithIndexViewStyle:self.indexViewStyle];
+        configuration.indexItemsBackGroundColorWhenDrag = [UIColor redColor];
+        configuration.indexItemsColorWhenDrag = [UIColor blackColor];
         _tableView.sc_indexViewConfiguration = configuration;
         _tableView.sc_translucentForTableViewInNavigationBar = self.translucent;
     }
