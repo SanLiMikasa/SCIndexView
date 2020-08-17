@@ -90,6 +90,18 @@
     }
 }
 
+- (void)indexViewTouchBegan:(SCIndexView *)indexView {
+    if (self.sc_indexViewDelegate && [self.delegate respondsToSelector:@selector(indexViewTouchBegan)]) {
+        [self.sc_indexViewDelegate indexViewTouchBegan];
+    }
+}
+
+- (void)indexViewTouchEnded:(SCIndexView *)indexView {
+    if (self.sc_indexViewDelegate && [self.delegate respondsToSelector:@selector(indexViewTouchEnded)]) {
+        [self.sc_indexViewDelegate indexViewTouchEnded];
+    }
+}
+
 #pragma mark - Getter and Setter
 
 - (SCIndexView *)sc_indexView

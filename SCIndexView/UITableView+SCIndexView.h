@@ -4,6 +4,8 @@
 
 @protocol SCTableViewSectionIndexDelegate
 
+@optional
+
 /**
  当点击或者滑动索引视图时，回调这个方法
  
@@ -20,6 +22,12 @@
  @return          索引位置
  */
 - (NSUInteger)sectionOfTableViewDidScroll:(UITableView *)tableView;
+
+/// 开始点击索引视图 该方法可能调用多次
+- (void)indexViewTouchBegan;
+
+/// 手指停止点击索引视图
+- (void)indexViewTouchEnded;
 
 @end
 
