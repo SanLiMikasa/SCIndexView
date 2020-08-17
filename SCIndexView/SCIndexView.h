@@ -20,7 +20,6 @@
  点击或者滑动索引视图时 自定义滚动到某个区 如果不实现这个方法、会默认滚动到跟index相对应的位置
 
  @param indexView 索引视图
- @param tableView 列表视图
  @param curIndex 当前索引位置
  @return section 区位置
  */
@@ -35,6 +34,14 @@
  @return          索引位置
  */
 - (NSUInteger)sectionOfIndexView:(SCIndexView *)indexView tableViewDidScroll:(UITableView *)tableView;
+
+/// 开始点击索引视图 该方法可能调用多次
+/// @param indexView 索引视图
+- (void)indexViewTouchBegan:(SCIndexView *)indexView;
+
+/// 手指停止点击索引视图
+/// @param indexView 索引视图
+- (void)indexViewTouchEnded:(SCIndexView *)indexView;
 
 @end
 

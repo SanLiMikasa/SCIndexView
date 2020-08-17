@@ -381,6 +381,10 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
     // 当滑动索引视图时，防止其他手指去触发事件
     if (self.touchingIndexView) return YES;
     
+    if (self.delegate && [self.delegate respondsToSelector:@selector(indexViewTouchBegan:)]) {
+        [self.delegate indexViewTouchBegan:self];
+    }
+    
     CALayer *firstLayer = self.searchLayer ?: self.subTextLayers.firstObject;
     if (!firstLayer) return NO;
     CALayer *lastLayer = self.subTextLayers.lastObject ?: self.searchLayer;
@@ -449,6 +453,9 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
     self.touchingIndexView = NO;
     [self hideIndicator:YES];
     [self showOrHideDragView:NO];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(indexViewTouchEnded:)]) {
+        [self.delegate indexViewTouchEnded:self];
+    }
 }
 
 - (void)cancelTrackingWithEvent:(UIEvent *)event
@@ -456,6 +463,9 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
     self.touchingIndexView = NO;
     [self hideIndicator:YES];
     [self showOrHideDragView:NO];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(indexViewTouchEnded:)]) {
+        [self.delegate indexViewTouchEnded:self];
+    }
 }
 
 #pragma mark - Getters and Setters
