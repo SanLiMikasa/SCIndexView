@@ -379,10 +379,11 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
     // 当滑动索引视图时，防止其他手指去触发事件
-    if (self.touchingIndexView) return YES;
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(indexViewTouchBegan:)]) {
-        [self.delegate indexViewTouchBegan:self];
+    if (self.touchingIndexView) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(indexViewTouchBegan:)]) {
+            [self.delegate indexViewTouchBegan:self];
+        }
+        return YES;
     }
     
     CALayer *firstLayer = self.searchLayer ?: self.subTextLayers.firstObject;
@@ -394,6 +395,9 @@ static inline NSInteger SCPositionOfTextLayerInY(CGFloat y, CGFloat margin, CGFl
     if (point.x > self.bounds.size.width - space - self.configuration.indexItemHeight
         && point.y > CGRectGetMinY(firstLayer.frame) - space
         && point.y < CGRectGetMaxY(lastLayer.frame) + space) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(indexViewTouchBegan:)]) {
+            [self.delegate indexViewTouchBegan:self];
+        }
         return YES;
     }
     return NO;
